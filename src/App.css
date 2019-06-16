@@ -1,12 +1,23 @@
 .App {
   margin: 5px;
   display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+.title {
+  text-align: center;
+}
+
+.sliders {
+  display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: center;
 }
 
-.slider-div {
+.slider {
   height: 80vh;
   display: flex;
   flex-direction: column;
