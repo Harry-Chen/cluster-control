@@ -55,12 +55,12 @@ def set_gpu_power(value=None, exec_pref=''):
     run(exec_pref + 'nvidia-smi -pl {}'.format(value))
 
 
-@app.route('/control', methods=['GET'])
+@app.route('/', methods=['GET'])
 def get_state():
     return jsonify(state)
 
 
-@app.route('/control', methods=['POST'])
+@app.route('/', methods=['POST'])
 def set_state():
     prefix = 'sudo clush -w {} '.format(app.config.get('host'))
     r = request.get_json()
@@ -80,7 +80,7 @@ def set_state():
     return jsonify(state)
 
 
-@app.route('/control', methods=['DELETE'])
+@app.route('/', methods=['DELETE'])
 def reset_state():
     prefix = 'sudo clush -b -w {} '.format(app.config.get('host'))
     clean_ass(prefix)
