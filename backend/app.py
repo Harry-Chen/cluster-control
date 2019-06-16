@@ -1,5 +1,4 @@
-from flask import Flask, jsonify
-from flask import request
+from flask import Flask, jsonify, request
 
 import os
 import sys
@@ -62,8 +61,10 @@ def get_state():
 
 @app.route('/', methods=['POST'])
 def set_state():
-    prefix = 'sudo clush -w {} '.format(app.config.get('host'))
+    prefix = app.config.get('prefix')
     r = request.get_json()
+
+    app.logger.info('Got new request: ' + str(r))
 
     if r['fanLevel'] != state['fanLevel']:
         set_fan(r['fanLevel'], prefix)
@@ -82,28 +83,28 @@ def set_state():
 
 @app.route('/', methods=['DELETE'])
 def reset_state():
-    prefix = 'sudo clush -b -w {} '.format(app.config.get('host'))
-    clean_ass(prefix)
+    clean_ass()
     return jsonify(state)
 
 
-def clean_ass(prefix):
+def clean_ass():
+    app.logger.info('Cleaning ass...')
+    prefix = app.config.get('prefix')
     set_fan(None, prefix)
     set_cpu_power(None, prefix)
     set_gpu_freq(None, prefix)
     set_gpu_power(None, prefix)
+    app.logger.info('Ass cleaned!')
 
 
 if __name__ == '__main__':
     # get host name
     if len(sys.argv) != 2:
-        print('Need hostnames to run!')
+        print('Need hostname to run!')
         exit(1)
 
-    # clean ass before run
-    command_prefix = 'sudo clush -w {} '.format(sys.argv[1])
-    clean_ass(command_prefix)
+    # set prefix then clean ass
+    app.config['prefix'] = 'sudo clush -w {} '.format(sys.argv[1])
+    clean_ass()
 
-    # start flask
-    app.config['host'] = command_prefix
     app.run(use_reloader=False)

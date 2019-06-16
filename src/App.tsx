@@ -40,9 +40,7 @@ const App: React.FC = () => {
 
     // component did mount
     React.useEffect(() => {
-        fetch(SERVER_STATE_URL, {
-            mode: 'no-cors'
-        })
+        fetch(SERVER_STATE_URL)
             .then(r => r.json())
             .then((r: ClusterControl) => {
                 setState({
@@ -74,9 +72,9 @@ const App: React.FC = () => {
             body: reset ? undefined : JSON.stringify(state),
             method: reset ? 'DELETE' : 'POST',
             headers: {
-                'content-type': 'application/json',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             },
-            mode: 'no-cors'
         })
             .then(r => r.json())
             .then((r: ClusterControl) => {
