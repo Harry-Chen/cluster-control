@@ -4,6 +4,7 @@
   flex-direction: column;
   flex-wrap: nowrap;
   justify-content: center;
+  align-items: center;
 }
 
 .title {
@@ -22,10 +23,16 @@
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
   margin-left: 50px;
   margin-right: 50px;
 }
 
 .slider-title {
   margin-bottom: 50px !important;
+}
+
+.reset-button {
+  margin-top: 20px !important;
 }
