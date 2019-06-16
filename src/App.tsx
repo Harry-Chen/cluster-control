@@ -187,7 +187,7 @@ const App: React.FC = () => {
                         defaultValue={initialState.gpuFrequency}
                         value={state.gpuFrequency}
                         min={135}
-                        max={1350}
+                        max={1380}
                         step={7.5}
                         disabled={!state.enabled}
                         valueLabelDisplay="on"
