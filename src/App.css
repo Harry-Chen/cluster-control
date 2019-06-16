@@ -1,3 +1,20 @@
 .App {
-  text-align: center;
+  margin: 5px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+.slider-div {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+.slider-title {
+  margin-bottom: 50px !important;
 }
