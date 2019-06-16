@@ -7,8 +7,8 @@ import './App.css';
 
 interface ClusterControl {
     fanLevel: number;
-    cpuFrequencyAvg: number;
-    cpuFrequencyMax: number;
+    cpuPowerAvg: number;
+    cpuPowerMax: number;
     gpuPower: number;
     gpuFrequency: number;
 }
@@ -22,16 +22,15 @@ type AppState = ClusterControl & EnableControl;
 
 const initialState: AppState = {
     fanLevel: 0,
-    cpuFrequencyAvg: 205,
-    cpuFrequencyMax: 255,
+    cpuPowerAvg: 205,
+    cpuPowerMax: 255,
     gpuPower: 250,
     gpuFrequency: 1380,
     enabled: false,
     notice: 'Fetching current state...'
 };
 
-// const SERVER_URL = 'http://mon.sc.team:9000';
-const SERVER_URL = 'http://localhost:3000';
+const SERVER_URL = 'http://mon.sc.team/cluster';
 const SERVER_STATE_URL = SERVER_URL + '/control';
 
 const App: React.FC = () => {
@@ -126,19 +125,19 @@ const App: React.FC = () => {
                 <Slider
                     className="slider-content"
                     orientation="vertical"
-                    defaultValue={[initialState.cpuFrequencyAvg, initialState.cpuFrequencyMax]}
-                    value={[state.cpuFrequencyAvg, state.cpuFrequencyMax]}
+                    defaultValue={[initialState.cpuPowerAvg, initialState.cpuPowerMax]}
+                    value={[state.cpuPowerAvg, state.cpuPowerMax]}
                     min={1}
                     max={255}
-                    step={0.5}
+                    step={1}
                     disabled={!state.enabled}
                     valueLabelDisplay="on"
                     onChange={(e, n) => {
                         const numbers = (n as number[]).sort();
                         setState({
                             ...state,
-                            cpuFrequencyAvg: numbers[0],
-                            cpuFrequencyMax: numbers[1],
+                            cpuPowerAvg: numbers[0],
+                            cpuPowerMax: numbers[1],
                         })
                     }}
                     onMouseUp={stateChange}

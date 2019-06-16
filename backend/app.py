@@ -5,6 +5,7 @@ import os
 import sys
 
 app = Flask(__name__)
+app.debug = True
 
 state = {}
 
@@ -19,7 +20,7 @@ def set_fan(value=None, exec_pref=''):
     if value is None or value == 0:
         value = ''
 
-    state['fanLevel'] = 0 if value == ' ' else value
+    state['fanLevel'] = 0 if value == '' else value
 
     run(exec_pref + '{} {}'.format(script, value))
 
@@ -54,25 +55,35 @@ def set_gpu_power(value=None, exec_pref=''):
     run(exec_pref + 'nvidia-smi -pl {}'.format(value))
 
 
-@app.route('/', methods=['GET'])
-def control():
+@app.route('/control', methods=['GET'])
+def get_state():
     return jsonify(state)
 
 
-@app.route('/', methods=['POST'])
-def control():
+@app.route('/control', methods=['POST'])
+def set_state():
     prefix = 'sudo clush -w {} '.format(app.config.get('host'))
     r = request.get_json()
 
     if r['fanLevel'] != state['fanLevel']:
         set_fan(r['fanLevel'], prefix)
+
     if r['cpuPowerAvg'] != state['cpuPowerAvg'] or r['cpuPowerMax'] != state['cpuPowerMax']:
         set_cpu_power((r['cpuPowerAvg'], r['cpuPowerMax']), prefix)
+
     if r['gpuPower'] != state['gpuPower']:
         set_gpu_power(r['gpuPower'], prefix)
-    if r['gpuFrequency'] != state['gpuFrequency']:
-        set_gpu_power(r['gpuFrequency'], prefix)
 
+    if r['gpuFrequency'] != state['gpuFrequency']:
+        set_gpu_freq(r['gpuFrequency'], prefix)
+
+    return jsonify(state)
+
+
+@app.route('/control', methods=['DELETE'])
+def reset_state():
+    prefix = 'sudo clush -w {} '.format(app.config.get('host'))
+    clean_ass(prefix)
     return jsonify(state)
 
 
@@ -86,6 +97,7 @@ def clean_ass(prefix):
 if __name__ == '__main__':
     # get host name
     if len(sys.argv) != 2:
+        print('Need hostnames to run!')
         exit(1)
 
     # clean ass before run
