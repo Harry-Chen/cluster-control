@@ -16,7 +16,7 @@ def run(command):
 
 
 def set_fan(value=None, exec_pref=''):
-    script = '/home/sc/scripts/localfan'
+    script = '/home/harry/scripts/localfan'
     if value is None or value == 0:
         value = ''
 
@@ -26,7 +26,7 @@ def set_fan(value=None, exec_pref=''):
 
 
 def set_cpu_power(value=None, exec_pref=''):
-    script = '/home/sc/scripts/baobaoctl.sh'
+    script = '/home/sc/baobao/baobaoctl.sh'
     if value is None:
         value = (205, 255)
 
@@ -82,7 +82,7 @@ def set_state():
 
 @app.route('/control', methods=['DELETE'])
 def reset_state():
-    prefix = 'sudo clush -w {} '.format(app.config.get('host'))
+    prefix = 'sudo clush -b -w {} '.format(app.config.get('host'))
     clean_ass(prefix)
     return jsonify(state)
 
@@ -106,4 +106,4 @@ if __name__ == '__main__':
 
     # start flask
     app.config['host'] = command_prefix
-    app.run()
+    app.run(use_reloader=False)
